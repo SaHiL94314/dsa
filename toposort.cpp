@@ -2,34 +2,33 @@
 class Solution
 {
 	public:
-	//Function to find the shortest distance of all the vertices
-    //from the source vertex S.
-    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
-    {
-        vector<int>dist(V,1e9);
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> minpq;
-        minpq.push({0,S});
-        dist[S]=0;
-        
-        while(!minpq.empty()){
-            int d=minpq.top().first;
-            int node=minpq.top().second;
-            minpq.pop();
-            
-            if(d!=dist[node]) continue;
-            for(auto &it:adj[node]){
-                int v=it[0];
-                int w=it[1];
-                if(d+w<dist[v]){
-                    dist[v]=d+w;
-                    minpq.push({d+w,v});
-                }
+	
+    vector<int> topologicalSort(vector<vector<int>>& adj) {
+        int n=adj.size();
+        vector<int>indegree(n);
+        for(int u=0;u<n;u++){
+            for(int &v:adj[u]){
+                indegree[v]++;
             }
         }
-        return dist;
+        
+        queue<int>q;
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0) q.push(i);
+        }
+        vector<int>res;
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            res.push_back(node);
+            for(int &neigh:adj[node]){
+                indegree[neigh]--;
+                if(indegree[neigh]==0) q.push(neigh);
+            }
+        }
+        return res;
     }
 };
-
 
 
 //using dfs

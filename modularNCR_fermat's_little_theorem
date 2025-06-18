@@ -1,0 +1,17 @@
+int mod=1e9+7;
+int findPower(int a,int b){
+    if(b==0) return 1;
+
+    long long halfRes=findPower(a,b/2);
+    long long res=(halfRes*halfRes)%mod;
+
+    if(b%2==1) res=(res*a)%mod;
+
+    return res%mod;
+}
+int ncr(int n,int r,vector<long long>&factorial){
+    long long a=factorial[n]%mod;
+    long long b=(factorial[r]*factorial[n-r])%mod;
+
+    return (a*(findPower(b,mod-2)%mod))%mod;
+}
